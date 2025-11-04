@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/journal")
@@ -23,10 +24,10 @@ public class JournalEntryControllerV2 {
     }
 
     @PostMapping
-    public boolean createEntry(@RequestBody JournalEntry myEntry) {
+    public JournalEntry createEntry(@RequestBody JournalEntry myEntry) {
         myEntry.setDate(LocalDateTime.now());
         journalEntryServices.saveEntry(myEntry);
-        return true;
+        return myEntry;
     }
 
     @GetMapping("id/{myId}")
@@ -43,5 +44,15 @@ public class JournalEntryControllerV2 {
     @PutMapping
     public JournalEntry updateEntry(@RequestBody JournalEntry entry) {
         return null;
+    }
+    @PutMapping("id/{id}")
+    public JournalEntry updateEntry(@PathVariable ObjectId id,@RequestBody JournalEntry newEntry) {
+        JournalEntry old = journalEntryServices.findById(id).orElse(null);
+        if(old != null && newEntry != null){
+            old.setTitle(newEntry.getTitle() != null ? newEntry.getTitle() : old.getTitle());
+            old.setContent(newEntry.getContent() != null ? newEntry.getContent() : old.getContent());
+        }
+        journalEntryServices.saveEntry(old);
+        return old;
     }
 }
