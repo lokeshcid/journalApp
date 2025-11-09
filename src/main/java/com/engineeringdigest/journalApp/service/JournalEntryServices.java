@@ -25,10 +25,10 @@ public class JournalEntryServices {
             journalEntry.setDate(LocalDateTime.now());
             JournalEntry savedJournalEntry = journalEntryRepository.save(journalEntry);
             user.getJournalEntries().add(savedJournalEntry);
-            user.setUserName(null);
             userService.saveEntry(user);
         } catch (Exception e) {
             System.out.println(e);
+            throw new RuntimeException("An error occurred while saving the entry",e);
         }
     }
     public void saveEntry(JournalEntry journalEntry) {
