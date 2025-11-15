@@ -1,6 +1,5 @@
 package com.engineeringdigest.journalApp.service;
 
-import com.engineeringdigest.journalApp.entity.JournalEntry;
 import com.engineeringdigest.journalApp.entity.User;
 import com.engineeringdigest.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
@@ -18,9 +17,12 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
-    public void saveEntry(User user) {
+    public void saveNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
+        userRepository.save(user);
+    }
+    public void saveUser(User user){
         userRepository.save(user);
     }
 
