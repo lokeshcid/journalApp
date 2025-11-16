@@ -21,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringSecurity {
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,6 +29,7 @@ public class SpringSecurity {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/journal/**","/user/**")
                         .authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest()
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
@@ -41,7 +42,7 @@ public class SpringSecurity {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authBuilder
-                .userDetailsService(userDetailsService)
+                .userDetailsService(userDetailsServiceImpl)
                 .passwordEncoder(passwordEncoder());
         return authBuilder.build();
     }
