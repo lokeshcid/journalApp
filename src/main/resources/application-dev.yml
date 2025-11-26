@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: journalApp
+  data:
+    mongodb:
+      uri: mongodb+srv://lokeshjmy_db_user:OKQxcUzMFsqdnfwA@cluster0.cffdj8e.mongodb.net/?appName=Cluster0
+      database: journaldb
+      auto-index-creation: true
+server:
+  port: 8080
